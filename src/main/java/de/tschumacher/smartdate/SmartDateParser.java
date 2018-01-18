@@ -38,11 +38,23 @@ public class SmartDateParser {
     this.parserItems = parserItems;
   }
 
-  public SmartDateParser() throws InstantiationException, IllegalAccessException {
+  public SmartDateParser() {
     super();
     this.parserItems = new ArrayList<SmartDateParserItem>();
+    addDefaultParser();
+  }
+
+  private void addDefaultParser() {
     for (final Class<? extends SmartDateParserItem> itemsClass : defaultParserItems) {
-      this.parserItems.add(itemsClass.newInstance());
+      this.parserItems.add(createInstance(itemsClass));
+    }
+  }
+
+  private SmartDateParserItem createInstance(final Class<? extends SmartDateParserItem> itemsClass) {
+    try {
+      return itemsClass.newInstance();
+    } catch (InstantiationException | IllegalAccessException e) {
+      throw new UnsupportedOperationException(e);
     }
   }
 
