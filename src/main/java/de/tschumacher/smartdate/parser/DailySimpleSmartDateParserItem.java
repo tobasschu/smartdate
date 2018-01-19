@@ -21,13 +21,12 @@ import org.joda.time.DateTime;
 
 import de.tschumacher.smartdate.domain.SmartDate;
 
-public class DailySmartDateParserItem extends CommonSmartDateParserItem implements
+public class DailySimpleSmartDateParserItem extends CommonSmartDateParserItem implements
     SmartDateParserItem {
 
 
-  private static Set<String> patterns = new HashSet<String>(Arrays.asList("dd.MM.YYYY",
-      "MMM dd, YYYY", "MMMM dd, YYYY", "MM-dd-YYYY", "MMM dd YYYY", "MMMM dd YYYY", "dd. MMM YYYY",
-      "dd. MMMM YYYY", "dd/MM/YYYY"));
+  private static Set<String> patterns = new HashSet<String>(Arrays.asList("dd.MM.", "MMM dd",
+      "MMMM dd", "MM-dd", "dd. MMM", "dd. MMMM"));
 
 
 
@@ -44,13 +43,14 @@ public class DailySmartDateParserItem extends CommonSmartDateParserItem implemen
 
   @Override
   protected DateTime computeEnd(DateTime dateTime) {
-    return dateTime.withTimeAtStartOfDay().plusDays(1).minusMillis(1);
+    return new DateTime().withTimeAtStartOfDay().withDayOfMonth(dateTime.dayOfMonth().get())
+        .withMonthOfYear(dateTime.monthOfYear().get()).plusDays(1).minusMillis(1);
   }
 
   @Override
   protected DateTime computeFrom(DateTime dateTime) {
-    return dateTime.withTimeAtStartOfDay().withDayOfMonth(dateTime.dayOfMonth().get());
+    return new DateTime().withTimeAtStartOfDay().withDayOfMonth(dateTime.dayOfMonth().get())
+        .withMonthOfYear(dateTime.monthOfYear().get());
   }
-
 
 }
